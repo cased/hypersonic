@@ -1,6 +1,6 @@
 {
   "name": "@runcased/hypersonic",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "GitHub PR automation for modern applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -66,4 +66,4 @@
       "/__tests__/helpers/"
     ]
   }
-} 
+}

@@ -99,9 +99,9 @@ export class Hypersonic {
       await this.github.createBranch(repo, branchName, defaultBranch);
 
       for (const [path, content] of Object.entries(contents)) {
-        const message = config?.commitMessage || 
-          (content === '' ? `Delete ${path}` : 
-          path in contents ? `Update ${path}` : `Add ${path}`);
+        const message =
+          config?.commitMessage ||
+          (content === '' ? `Delete ${path}` : path in contents ? `Update ${path}` : `Add ${path}`);
         await this.github.updateFile(repo, path, content, message, branchName);
       }
 
@@ -159,17 +159,11 @@ export class Hypersonic {
 
       // Update each file
       for (const [path, content] of Object.entries(contents)) {
-        const message = config?.commitMessage || 
-          (content === '' ? `Delete ${path}` : 
-          path in contents ? `Update ${path}` : `Add ${path}`);
+        const message =
+          config?.commitMessage ||
+          (content === '' ? `Delete ${path}` : path in contents ? `Update ${path}` : `Add ${path}`);
 
-        await this.github.updateFile(
-          repo,
-          path,
-          content,
-          message,
-          branch
-        );
+        await this.github.updateFile(repo, path, content, message, branch);
       }
 
       const prUrl = await this.github.createPullRequest(
@@ -204,7 +198,6 @@ export class Hypersonic {
       }
 
       return prUrl;
-
     } catch (error) {
       throw new GitHubError(`Failed to create PR: ${error}`);
     }
