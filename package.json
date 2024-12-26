@@ -1,0 +1,69 @@
+{
+  "name": "@runcased/hypersonic",
+  "version": "0.1.0",
+  "description": "GitHub PR automation for modern applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "keywords": [
+    "github",
+    "pull-request",
+    "automation",
+    "typescript",
+    "ai",
+    "saas"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runcased/hypersonic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/runcased/hypersonic/issues"
+  },
+  "homepage": "https://github.com/runcased/hypersonic#readme",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "preversion": "npm run lint && npm run test",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "author": "Cased <ted@cased.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^19.0.0",
+    "simple-git": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.0.0",
+    "jest": "^29.0.0",
+    "prettier": "^2.0.0",
+    "ts-jest": "^29.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.3.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/",
+      "/__tests__/helpers/"
+    ]
+  }
+} 
