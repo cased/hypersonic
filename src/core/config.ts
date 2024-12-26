@@ -35,6 +35,7 @@ export const DEFAULT_PR_CONFIG: PRConfig = {
   mergeStrategy: MergeStrategy.SQUASH,
   deleteBranchOnMerge: true,
   autoMerge: false,
+  commitMessage: undefined,
 };
 
 export const DEFAULT_CONFIG: HypersonicConfig = {
