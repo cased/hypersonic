@@ -159,20 +159,17 @@ export class GitHubAPI {
   ): Promise<void> {
     try {
       const [owner, repoName] = repo.split('/');
-      
+
       // Enable auto-merge and set merge method in one call
       await this.octokit.pulls.update({
         owner,
         repo: repoName,
         pull_number: prNumber,
         auto_merge: true,
-        merge_method: strategy
+        merge_method: strategy,
       });
     } catch (error: any) {
-      throw new GitHubError(
-        `Failed to enable auto-merge: ${error}`,
-        error?.status
-      );
+      throw new GitHubError(`Failed to enable auto-merge: ${error}`, error?.status);
     }
   }
 

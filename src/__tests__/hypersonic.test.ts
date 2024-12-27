@@ -73,15 +73,13 @@ describe('Hypersonic', () => {
       expect(GitHubAPI).toHaveBeenCalledWith('test-token', DEFAULT_CONFIG.baseUrl);
     });
 
-    test('requires baseUrl when initialized with config object', () => {
-      expect(
-        () =>
-          new Hypersonic({
-            githubToken: 'test-token',
-            defaultPrConfig: DEFAULT_PR_CONFIG,
-            // missing baseUrl
-          } as any)
-      ).toThrow();
+    test('allows missing baseUrl when initialized with config object', () => {
+      const client = new Hypersonic({
+        githubToken: 'token',
+        defaultPrConfig: {} as any,
+        // baseUrl will use default
+      });
+      expect(client).toBeInstanceOf(Hypersonic);
     });
   });
 

@@ -176,19 +176,17 @@ describe('GitHubAPI', () => {
         repo: 'repo',
         pull_number: 123,
         auto_merge: true,
-        merge_method: 'squash'
+        merge_method: 'squash',
       });
     });
 
     test('handles errors', async () => {
       jest.spyOn(mockOctokit.pulls, 'update').mockRejectedValue({
         status: 422,
-        message: 'Auto-merge not enabled'
+        message: 'Auto-merge not enabled',
       });
 
-      await expect(github.enableAutoMerge('user/repo', 123, 'squash'))
-        .rejects
-        .toThrow(GitHubError);
+      await expect(github.enableAutoMerge('user/repo', 123, 'squash')).rejects.toThrow(GitHubError);
     });
   });
 

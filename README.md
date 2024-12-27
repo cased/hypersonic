@@ -62,7 +62,9 @@ import { Hypersonic, MergeStrategy } from '@runcased/hypersonic';
 // Initialize with just a token
 const hypersonic = new Hypersonic('your-github-token');
 
-// Or with full configuration
+// Or with full configuration: passing token, an optional baseUrl, 
+// and a defaultPrConfig object with whatever you want. 
+// This is useful if you want to set your own defaults for all PRs.
 const hypersonic = new Hypersonic({
   githubToken: 'your-github-token',
   baseUrl: 'https://api.github.com', // Optional, useful for GitHub Enterprise
@@ -94,7 +96,7 @@ await hypersonic.createPrFromContent(
   'owner/repo',      // Repository in format "owner/repo"
   'file content',    // The actual content to write
   'path/to/file.txt' // Path where file will be created/updated in the repo
-  {                  // Optional config
+  {                  // Optional config. Will override any defaults or instance config.
     title: 'Add new documentation',
     description: 'Added API documentation for new endpoints',
     baseBranch: 'develop',
@@ -237,13 +239,13 @@ There are two levels of configuration:
   };
   ```
 
-2. **Per-Request Configuration** - When calling PR creation methods, only `title` is required, all other fields are optional and will use instance defaults:
+2. **Per-Request Configuration** - When calling PR creation methods, you need to provide:
   ```typescript
   interface PRRequestConfig {
     // Required
-    title: string;              // PR title (overrides default)
+    title: string;              // PR title
     
-    // Optional - all other fields from PRConfig
+    // All other fields are optional and will use defaults if not specified
     description?: string;
     baseBranch?: string;
     draft?: boolean;
@@ -257,26 +259,25 @@ There are two levels of configuration:
   }
   ```
 
-When using any of the PR creation methods, you must provide values for all required 
-fields, either through the default configuration or in the per-request config. Optional 
-fields will use sensible defaults if not provided.
+When using any of the PR creation methods, you only need to provide a `title`. All other fields 
+will use their default values if not specified.
 
-Example with all required fields:
+Example configuration:
 
 ```typescript
-const config: PRConfig = {
+const config: Partial<PRConfig> = {
   // Required
   title: 'Update API documentation',
+  
+  // Optional - these will use defaults if not specified
+  description: 'Updated endpoint documentation',
   baseBranch: 'main',
   draft: false,
-  teamReviewers: [],  // Can be empty but must be specified
-  mergeStrategy: 'squash',
-  deleteBranchOnMerge: true,
-  
-  // Optional
-  description: 'Updated endpoint documentation',
   labels: ['documentation'],
   reviewers: ['teammate'],
+  teamReviewers: [],
+  mergeStrategy: 'squash',
+  deleteBranchOnMerge: true,
   autoMerge: true
 };
 ```
@@ -325,23 +326,6 @@ await hypersonic.createPrFromContent(
     // mergeStrategy inherits 'rebase' from instance config
     // Other fields use built-in defaults
   }
-);
-```
-
-### Git Operations
-
-```typescript
-// Apply a diff to create/update files
-await hypersonic.applyDiff(
-  'owner/repo',
-  'feature-branch',
-  diffContent
-);
-
-// Get diff from local changes
-const diff = await hypersonic.getLocalDiff(
-  '/path/to/repo',
-  ['file1.txt', 'file2.txt'] // Optional file paths
 );
 ```
 
