@@ -26,6 +26,7 @@ describe('GitHubAPI', () => {
         create: jest.fn(),
         requestReviewers: jest.fn(),
         updateBranch: jest.fn(),
+        update: jest.fn(),
       },
       issues: {
         addLabels: jest.fn(),
@@ -166,12 +167,28 @@ describe('GitHubAPI', () => {
 
   describe('enableAutoMerge', () => {
     test('enables auto-merge with specified strategy', async () => {
-      jest.spyOn(mockOctokit.pulls, 'updateBranch').mockResolvedValue({} as any);
+      jest.spyOn(mockOctokit.pulls, 'update').mockResolvedValue({} as any);
 
       await github.enableAutoMerge('user/repo', 123, 'squash');
 
-      // Note: This test might need adjustment based on actual implementation
-      expect(mockOctokit.pulls.updateBranch).toHaveBeenCalled();
+      expect(mockOctokit.pulls.update).toHaveBeenCalledWith({
+        owner: 'user',
+        repo: 'repo',
+        pull_number: 123,
+        auto_merge: true,
+        merge_method: 'squash'
+      });
+    });
+
+    test('handles errors', async () => {
+      jest.spyOn(mockOctokit.pulls, 'update').mockRejectedValue({
+        status: 422,
+        message: 'Auto-merge not enabled'
+      });
+
+      await expect(github.enableAutoMerge('user/repo', 123, 'squash'))
+        .rejects
+        .toThrow(GitHubError);
     });
   });
 
