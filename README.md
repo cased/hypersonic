@@ -1,10 +1,11 @@
 # Hypersonic
 
 Streamlined GitHub PR automation for modern applications in Typescript. 
-Supersonic is a high-level API for creating and managing Pull Requests, 
+Hypersonic is a high-level API for creating and managing Pull Requests, 
 designed specifically for AI and SaaS applications that need to propose 
 changes to user repositories.
 
+For the Python version, check out [supersonic](https://github.com/cased/supersonic).
 
 ## Features
 
