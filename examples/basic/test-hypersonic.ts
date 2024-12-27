@@ -3,9 +3,19 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
 async function main() {
-  const hypersonic = new Hypersonic(process.env.GITHUB_TOKEN || '');
+  const token = process.env.HYPERSONIC_GITHUB_TOKEN || '';
+  if (!token) {
+    console.error('❌ Please set HYPERSONIC_GITHUB_TOKEN environment variable');
+    process.exit(1);
+  }
 
-  const repo = process.argv[2] || 'tnm/test-sonic';
+  const hypersonic = new Hypersonic(token);
+
+  const repo = process.argv[2];
+  if (!repo) {
+    console.error('❌ Please provide a repository (e.g. "org/repo")');
+    process.exit(1);
+  }
 
   try {
     // 1. Single file from content

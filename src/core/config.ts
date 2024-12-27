@@ -10,20 +10,20 @@ export type MergeStrategyString = `${MergeStrategy}`;
 export interface PRConfig {
   title: string;
   description?: string;
-  baseBranch: string;
-  draft: boolean;
-  labels: string[];
-  reviewers: string[];
-  teamReviewers: string[];
-  mergeStrategy: MergeStrategy | MergeStrategyString;
-  deleteBranchOnMerge: boolean;
-  autoMerge: boolean;
+  baseBranch?: string;
+  draft?: boolean;
+  labels?: string[];
+  reviewers?: string[];
+  teamReviewers?: string[];
+  mergeStrategy?: MergeStrategy | MergeStrategyString;
+  deleteBranchOnMerge?: boolean;
+  autoMerge?: boolean;
   commitMessage?: string;
 }
 
 export interface HypersonicConfig {
   githubToken: string;
-  baseUrl: string;
+  baseUrl?: string;
   appName?: string;
   defaultPrConfig: PRConfig;
 }

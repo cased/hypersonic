@@ -26,6 +26,8 @@ yarn-error.log*
 # Testing
 coverage/
 .nyc_output/
+examples/basic/test-files/
+examples/basic/test.txt
 
 # Misc
 .DS_Store

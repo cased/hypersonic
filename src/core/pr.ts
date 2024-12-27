@@ -20,9 +20,6 @@ export class Hypersonic {
       if (!config.githubToken) {
         throw new Error('GitHub token is required');
       }
-      if (!config.baseUrl) {
-        throw new Error('baseUrl is required when using config object');
-      }
       this.config = {
         ...DEFAULT_CONFIG,
         ...config,
@@ -44,25 +41,24 @@ export class Hypersonic {
   }
 
   private async handlePrExtras(repo: string, prUrl: string, prConfig: PRConfig): Promise<void> {
-    // Extract PR number from URL
     const match = prUrl.match(/\/pull\/(\d+)$/);
     if (!match) {
       throw new GitHubError('Invalid PR URL format');
     }
     const prNumber = parseInt(match[1], 10);
 
-    // Add labels if specified
-    if (prConfig.labels.length > 0) {
+    // Add labels if specified and not empty
+    if (prConfig.labels && prConfig.labels.length > 0) {
       await this.github.addLabels(repo, prNumber, prConfig.labels);
     }
 
-    // Add reviewers if specified
-    if (prConfig.reviewers.length > 0) {
+    // Add reviewers if specified and not empty
+    if (prConfig.reviewers && prConfig.reviewers.length > 0) {
       await this.github.addReviewers(repo, prNumber, prConfig.reviewers);
     }
 
-    // Enable auto-merge if requested
-    if (prConfig.autoMerge) {
+    // Enable auto-merge if requested and merge strategy is specified
+    if (prConfig.autoMerge && prConfig.mergeStrategy) {
       await this.github.enableAutoMerge(repo, prNumber, prConfig.mergeStrategy);
     }
   }
