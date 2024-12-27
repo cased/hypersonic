@@ -1,9 +1,4 @@
-import { 
-  Hypersonic, 
-  MergeStrategy, 
-  HypersonicConfig, 
-  PRConfig 
-} from '../core';
+import { Hypersonic, MergeStrategy, HypersonicConfig, PRConfig } from '../core';
 
 describe('Hypersonic Configuration', () => {
   const token = 'test-token';
@@ -27,8 +22,8 @@ describe('Hypersonic Configuration', () => {
           mergeStrategy: MergeStrategy.REBASE,
           draft: true,
           deleteBranchOnMerge: false,
-          autoMerge: true
-        }
+          autoMerge: true,
+        },
       };
       const client = new Hypersonic(config);
       expect(client).toBeInstanceOf(Hypersonic);
@@ -57,7 +52,7 @@ describe('Hypersonic Configuration', () => {
         deleteBranchOnMerge: true,
         autoMerge: false,
         commitMessage: undefined,
-        description: undefined
+        description: undefined,
       });
     });
 
@@ -73,11 +68,11 @@ describe('Hypersonic Configuration', () => {
           mergeStrategy: MergeStrategy.REBASE,
           draft: true,
           deleteBranchOnMerge: false,
-          autoMerge: true
-        }
+          autoMerge: true,
+        },
       };
       const clientWithDefaults = new Hypersonic(instanceConfig);
-      
+
       const config = { title: 'Test PR' };
       const finalConfig = await clientWithDefaults['preparePrConfig'](config);
 
@@ -92,7 +87,7 @@ describe('Hypersonic Configuration', () => {
         deleteBranchOnMerge: false,
         autoMerge: true,
         commitMessage: undefined,
-        description: undefined
+        description: undefined,
       });
     });
 
@@ -108,31 +103,31 @@ describe('Hypersonic Configuration', () => {
           mergeStrategy: MergeStrategy.REBASE,
           draft: true,
           deleteBranchOnMerge: false,
-          autoMerge: true
-        }
+          autoMerge: true,
+        },
       };
       const clientWithDefaults = new Hypersonic(instanceConfig);
-      
+
       const requestConfig = {
         title: 'Test PR',
         labels: ['urgent'],
         reviewers: [],
-        draft: false
+        draft: false,
       };
       const finalConfig = await clientWithDefaults['preparePrConfig'](requestConfig);
 
       expect(finalConfig).toEqual({
         title: 'Test PR',
         baseBranch: 'develop',
-        labels: ['urgent'],  // Overrides instance default
-        reviewers: [],      // Overrides instance default
+        labels: ['urgent'], // Overrides instance default
+        reviewers: [], // Overrides instance default
         teamReviewers: [],
         mergeStrategy: MergeStrategy.REBASE,
-        draft: false,       // Overrides instance default
+        draft: false, // Overrides instance default
         deleteBranchOnMerge: false,
         autoMerge: true,
         commitMessage: undefined,
-        description: undefined
+        description: undefined,
       });
     });
 
@@ -146,9 +141,9 @@ describe('Hypersonic Configuration', () => {
 
       expect(finalConfig.title).toBe('Partial Config');
       expect(finalConfig.labels).toEqual(['test']);
-      expect(finalConfig.baseBranch).toBe('main');  // Default
-      expect(finalConfig.draft).toBe(false);        // Default
-      expect(finalConfig.reviewers).toEqual([]);    // Default
+      expect(finalConfig.baseBranch).toBe('main'); // Default
+      expect(finalConfig.draft).toBe(false); // Default
+      expect(finalConfig.reviewers).toEqual([]); // Default
       expect(finalConfig.mergeStrategy).toBe(MergeStrategy.SQUASH); // Default
     });
   });
