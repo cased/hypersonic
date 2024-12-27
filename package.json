@@ -1,6 +1,6 @@
 {
   "name": "@runcased/hypersonic",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Streamlined GitHub PR automation for modern TypeScript applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
