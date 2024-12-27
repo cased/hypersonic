@@ -46,8 +46,7 @@ await hypersonic.createPrFromFile(
   {
     title: 'Update documentation',
     description: 'Updated API docs with new endpoints',
-    labels: ['documentation'],
-    reviewers: ['teammate']
+    labels: ['documentation']
   }
 );
 ```
@@ -217,6 +216,12 @@ interface PRConfig {
   commitMessage?: string; // Custom commit message
 }
 ```
+
+## Examples
+
+For complete working examples, check out:
+- [Basic Usage](examples/basic/test-hypersonic.ts) - Shows all PR creation methods and configuration options
+
 
 ### PR Configuration
 

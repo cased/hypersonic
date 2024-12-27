@@ -1,6 +1,6 @@
-# Basic Hypersonic Example
+# Hypersonic Example
 
-This example demonstrates the basic features of hypersonic:
+This example demonstrates the features of hypersonic:
 - Creating PRs with multiple file changes
 - Adding labels and descriptions
 - Enabling auto-merge
