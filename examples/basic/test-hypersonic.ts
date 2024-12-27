@@ -1,80 +1,80 @@
 import { Hypersonic, MergeStrategy } from '@runcased/hypersonic';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 
 async function main() {
-  // Initialize with your token
-  const hypersonic = new Hypersonic(process.env.GITHUB_TOKEN!);
-  const repo = process.argv[2];
+  const hypersonic = new Hypersonic(process.env.GITHUB_TOKEN || '');
 
-  if (!repo) {
-    console.error('❌ Please provide a repository (e.g. "org/repo")');
-    process.exit(1);
-  }
-
-  if (!repo.includes('/')) {
-    console.error('❌ Repository must be in format "org/repo"');
-    process.exit(1);
-  }
+  const repo = process.argv[2] || 'tnm/test-sonic';
 
   try {
-    // 1. Update README with current timestamp
-    const timestamp = new Date().toISOString();
-    const readmeContent = `# Test Sonic
-    
-This repository is used for testing the hypersonic GitHub PR automation library.
-Last updated: ${timestamp}
-
-## What is this?
-
-This is an automated PR created by hypersonic to demonstrate its features:
-- Single file updates
-- Multiple file updates
-- PR customization
-`;
-
-    // 2. Create a new feature file
-    const featureContent = `
-// This is a sample feature
-export function greet(name: string) {
-  return \`Hello, \${name}! The time is \${new Date().toLocaleTimeString()}\`;
-}
-`;
-
-    // 3. Create PR with multiple changes
-    const prUrl = await hypersonic.createPrFromMultipleContents(
+    // 1. Single file from content
+    const contentPrUrl = await hypersonic.createPrFromContent(
       repo,
+      'Hello from Hypersonic!',
+      'docs/hello.md',
       {
-        'README.md': readmeContent,
-        'src/feature.ts': featureContent,
-      },
-      {
-        title: 'Update documentation and add greeting feature',
-        description: `This PR demonstrates hypersonic's capabilities:
-        
-1. Updates README.md with current timestamp
-2. Creates a new feature file
-        
-This PR was automatically created using hypersonic.`,
-        labels: ['demo', 'automated'],
-        draft: false,
-        autoMerge: true,
-        mergeStrategy: MergeStrategy.SQUASH,
-        commitMessage: 'Update documentation and add greeting feature'
+        title: 'Add hello doc',
+        description: 'Testing single file content creation',
+        labels: ['documentation']
       }
     );
+    console.log('Created PR from content:', contentPrUrl);
 
-    console.log(`✨ Created PR: ${prUrl}`);
+    // 2. Single file from local filesystem
+    const localFile = join(__dirname, 'test.txt');
+    await writeFile(localFile, 'Local file content');
+    
+    const filePrUrl = await hypersonic.createPrFromFile(
+      repo,
+      localFile,
+      'test/test.txt',
+      {
+        title: 'Add test file',
+        description: 'Testing local file upload'
+      }
+    );
+    console.log('Created PR from file:', filePrUrl);
+
+    // 3. Multiple files from content
+    const multiContentPrUrl = await hypersonic.createPrFromMultipleContents(
+      repo,
+      {
+        'config/settings.json': JSON.stringify({ setting: 'value' }, null, 2),
+        'docs/README.md': '# Test Project\nCreated by Hypersonic',
+        'src/version.ts': 'export const VERSION = "1.0.0";'
+      },
+      {
+        title: 'Add multiple configuration files',
+        description: 'Setting up project configuration'
+      }
+    );
+    console.log('Created PR from multiple contents:', multiContentPrUrl);
+
+    // 4. Multiple files from local filesystem
+    const testDir = join(__dirname, 'test-files');
+    await mkdir(testDir, { recursive: true });
+    await writeFile(join(testDir, 'file1.txt'), 'Content 1');
+    await writeFile(join(testDir, 'file2.txt'), 'Content 2');
+
+    const multiFilePrUrl = await hypersonic.createPrFromFiles(
+      repo,
+      {
+        [join(testDir, 'file1.txt')]: 'test/file1.txt',
+        [join(testDir, 'file2.txt')]: 'test/file2.txt'
+      },
+      {
+        title: 'Add multiple test files',
+        description: 'Testing multiple file uploads',
+        labels: ['testing']
+      }
+    );
+    console.log('Created PR from multiple files:', multiFilePrUrl);
+
   } catch (error) {
     console.error('❌ Error:', error);
     process.exit(1);
   }
 }
 
-// Run if called directly
-if (require.main === module) {
-  if (!process.env.GITHUB_TOKEN) {
-    console.error('❌ Please set GITHUB_TOKEN environment variable');
-    process.exit(1);
-  }
-  
-  main().catch(console.error);
-} 
+main(); 

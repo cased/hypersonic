@@ -218,40 +218,67 @@ interface PRConfig {
 
 ### PR Configuration
 
-All PR creation methods accept an optional config object:
+There are two levels of configuration:
 
-```typescript
-interface PRConfig {
-  title: string;
-  description?: string;
-  baseBranch: string;
-  draft: boolean;
-  labels: string[];
-  reviewers: string[];
-  teamReviewers: string[];
-  mergeStrategy: MergeStrategy | 'merge' | 'squash' | 'rebase';
-  deleteBranchOnMerge: boolean;
-  autoMerge: boolean;
-  commitMessage?: string;
-}
-```
+1. **Instance Configuration** - When creating a Hypersonic instance, you can provide a defaultPrConfig. All fields are optional and will use these defaults:
+  ```typescript
+  const DEFAULT_PR_CONFIG = {
+    title: 'Automated changes',
+    description: undefined,
+    baseBranch: 'main',
+    draft: false,
+    labels: [],
+    reviewers: [],
+    teamReviewers: [],
+    mergeStrategy: MergeStrategy.SQUASH,
+    deleteBranchOnMerge: true,
+    autoMerge: false,
+    commitMessage: undefined
+  };
+  ```
 
-Example with config:
-
-```typescript
-await hypersonic.createPrFromContent(
-  'owner/repo',
-  'content',
-  'file.txt',
-  {
-    title: 'Update API docs',
-    description: 'Updated endpoint documentation',
-    labels: ['documentation'],
-    reviewers: ['teammate'],
-    mergeStrategy: 'squash', // Can use string literal or MergeStrategy.SQUASH
-    autoMerge: true
+2. **Per-Request Configuration** - When calling PR creation methods, only `title` is required, all other fields are optional and will use instance defaults:
+  ```typescript
+  interface PRRequestConfig {
+    // Required
+    title: string;              // PR title (overrides default)
+    
+    // Optional - all other fields from PRConfig
+    description?: string;
+    baseBranch?: string;
+    draft?: boolean;
+    labels?: string[];
+    reviewers?: string[];
+    teamReviewers?: string[];
+    mergeStrategy?: MergeStrategy | 'merge' | 'squash' | 'rebase';
+    deleteBranchOnMerge?: boolean;
+    autoMerge?: boolean;
+    commitMessage?: string;
   }
-);
+  ```
+
+When using any of the PR creation methods, you must provide values for all required 
+fields, either through the default configuration or in the per-request config. Optional 
+fields will use sensible defaults if not provided.
+
+Example with all required fields:
+
+```typescript
+const config: PRConfig = {
+  // Required
+  title: 'Update API documentation',
+  baseBranch: 'main',
+  draft: false,
+  teamReviewers: [],  // Can be empty but must be specified
+  mergeStrategy: 'squash',
+  deleteBranchOnMerge: true,
+  
+  // Optional
+  description: 'Updated endpoint documentation',
+  labels: ['documentation'],
+  reviewers: ['teammate'],
+  autoMerge: true
+};
 ```
 
 ### Configuration Precedence
