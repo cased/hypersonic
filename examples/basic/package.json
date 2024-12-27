@@ -6,7 +6,7 @@
     "start": "ts-node test-hypersonic.ts"
   },
   "dependencies": {
-    "@runcased/hypersonic": "^0.3.2"
+    "@runcased/hypersonic": "^0.3.3"
   },
   "devDependencies": {
     "typescript": "^5.3.0",
