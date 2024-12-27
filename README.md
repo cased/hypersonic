@@ -1,6 +1,10 @@
 # Hypersonic
 
-GitHub PR automation for modern applications.
+Streamlined GitHub PR automation for modern applications in Typescript. 
+Supersonic is a high-level API for creating and managing Pull Requests, 
+designed specifically for AI and SaaS applications that need to propose 
+changes to user repositories.
+
 
 ## Features
 
@@ -11,6 +15,14 @@ GitHub PR automation for modern applications.
 - 📦 Multiple File Support: Update any number of files in one PR
 - 🎯 Perfect for Apps & Scripts: From SaaS features to internal tools
 - 🤖 Automation Ready: Auto-merge, labels, reviewers, and more
+
+Common use cases:
+
+- AI applications and agents suggesting code improvements
+- Documentation generators keeping docs in sync with code
+- Configuration management tools proposing config updates
+- Any service that needs to propose changes to user repositories
+
 
 ## Installation
 
